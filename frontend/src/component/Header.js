@@ -1,15 +1,43 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Logo from './Logo'
 import { IoMdSearch } from "react-icons/io";
 import { FaRegUserCircle } from "react-icons/fa";
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import SummaryApi from '../common';
+import { toast } from 'react-toastify';
+import { setUserdetails } from '../store/userSlice';
 
 
 const Header = () => {
+  
+  const user = useSelector(state => state?.user?.user)
+  const dispatch = useDispatch()
+
+  const [menuDisplay,setMenuDisplay] = useState(false)
+  console.log("user header" ,user)
+
+  const handleLogout = async() => {
+    const fetchData = await fetch(SummaryApi.logout.url,{
+        method : SummaryApi.logout.method,
+        credentials : 'include'
+    })
+
+    const data = await fetchData.json()
+
+    if(data.success){
+      toast.success(data.message)
+      dispatch(setUserdetails(null))
+    }else{
+      toast.error(data.message)
+    }
+
+
+  }
   return (
     <header className='h-16 shadow-md bg-white'>
-        <div className='h-full container  flex items-center px-4 justify-between'>
-            <div className=''>
+        <div className='h-full container max-w-full   flex items-center  justify-between'>
+            <div className='ml-5'>
                 <Link to ={"/"}>
                     <Logo w={290} h={200}/>
                 </Link>
@@ -24,12 +52,41 @@ const Header = () => {
 
             
 
-            <div className='flex items-center  gap-7'>
-                <div className='text-4xl cursor-pointer'>
-                    <FaRegUserCircle/>
+            <div className='flex items-center  gap-7 '>
+                <div className='reletive group flex justify-center'>
+                <div className=' text-4xl cursor-pointer'onClick={()=>setMenuDisplay(preve =>!preve)}>
+                    {
+                        
+                      user? (<span className="text-lg font-semibold text-gray-800 text-center flex">{user.name}</span>):
+                      ( 
+                      
+                        
+                    
+                       <FaRegUserCircle/>)
+                    
+                    }
+                    {
+                        menuDisplay && (
+                        <div className='absolute bg-white bottom-0 top-11 h-fit p-2 text-lg shadow-lg rounded-md '>
+                        <nav>
+                            <Link to={"admin-panel"}className=''>Admin panel</Link>
+                        </nav>
+                    </div>
+                    
+
+                        )
+                    }
+
+                    
                 </div>
-                <div>
-                    <Link to={"/login"} className='px-3 py-1 rounded-full text-white bg-red-600 hover:bg-red-700'>Login</Link>
+                </div>
+                <div className='mr-6'>
+                    {
+                        user?._id ?(
+                            <button onClick={handleLogout} className='px-3 py-1 rounded-full text-white bg-red-600 hover:bg-red-700'>Logout</button>
+                        ):(<Link to={"/login"} className='px-3 py-1 rounded-full text-white bg-red-600 hover:bg-red-700 '>Login</Link>)
+                    }
+                    
                 </div>
             </div>
             

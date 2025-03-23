@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import loginIcons from '../assest/profile.png'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SummaryApi from '../common';
+import { toast } from 'react-toastify';
 
 const Signup = () => {
     const[data,setData] = useState({
@@ -11,6 +12,7 @@ const Signup = () => {
             confirmpassword: '',
         })
         
+        const navigate = useNavigate()
         const handleOnChange = (e) =>{
             const {name,value} = e.target
             setData((preve)=>{
@@ -23,7 +25,7 @@ const Signup = () => {
             e.preventDefault()
 
             if(data.password === data.confirmpassword){
-                console.log("SummaryApi.signUP.url" ,SummaryApi.signUP.url)
+                
                 const dataResponse = await fetch(SummaryApi.signUP.url,{
                     method : SummaryApi.signUP.method,
                     headers: {
@@ -34,8 +36,18 @@ const Signup = () => {
                 })
         
                 const dataApi = await dataResponse.json()
+
+                if (dataApi.success){
+                    toast.success(dataApi.message)
+                    navigate('/login')
+                }
+                if(dataApi.error){
+                    toast.error(dataApi.message)
+                }
+
+                //toast(dataApi.message) 
         
-                console.log("data" , dataApi)
+               
                 //alert("Passwords do not match")
                 //return
             }
@@ -46,7 +58,7 @@ const Signup = () => {
             
         }    
     
-        console.log("data login", data)
+        
   return (
     <section id='signup' className='py-20'>
         <div className='bg-white p-4 w-full max-w-md mx-auto rounded-md '>

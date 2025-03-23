@@ -1,12 +1,20 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import loginIcons from '../assest/profile.png'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import SummaryApi from '../common';
+import { toast } from 'react-toastify';
+import Context from '../context';
 
 const Login = () => {
     const[data,setData] = useState({
         email: '',
         password: '',
     })
+
+    const navigate = useNavigate()
+    const {fetchUserDetails} = useContext(Context)
+    
+
     
     const handleOnChange = (e) =>{
         const {name,value} = e.target
@@ -16,9 +24,30 @@ const Login = () => {
         })
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault()
         // call your API here with the data
+
+        const dataResponse = await fetch(SummaryApi.signIN.url,{
+            method : SummaryApi.signIN.method,
+
+            credentials: 'include',
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(data)
+        })
+
+        const dataApi = await dataResponse.json()
+        if(dataApi.success){
+                toast.success(dataApi.message)
+                navigate('/')
+                fetchUserDetails()
+        }
+        if(dataApi.error){
+                toast.error(dataApi.message)
+        }
+        
 
     }
 
@@ -55,6 +84,7 @@ const Login = () => {
                     </div>   
                 </div>
                 <button className='bg-red-600 text-white m-2 px-6 py-2 rounded-2xl hover:scale-105 hover:bg-red-700 transition-all mx-auto block mt-4'>Login</button>
+                
             </form>
             <p className='my-4 text-center'>Don't have account ? <Link to={"/sign-up"} className=' text-red-600 hover:text-red-700 hover:underline' >Sign Up</Link> </p>
         </div>

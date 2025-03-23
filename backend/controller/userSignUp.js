@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 async function userSignUpcontroller(req, res,){
   try{
-     const { email, password, name}=req.body
+    const { email, password, name}=req.body
 
     const user = await userModel.findOne({email}) 
 
@@ -24,7 +24,7 @@ async function userSignUpcontroller(req, res,){
      }
 
      const salt = bcrypt.genSaltSync(10);
-     const hashPassword = await bcrypt.hashSync("password", salt);
+     const hashPassword = await bcrypt.hashSync(password, salt);
 
      if(!hashPassword){
         throw new Error("Something is wrong")
@@ -32,11 +32,12 @@ async function userSignUpcontroller(req, res,){
 
      const payload = {
         ...req.body,
+        role : "GENERAL",
         password :  hashPassword
     }
 
      const userData = new userModel(payload)
-     const saveUser = userData.save()
+     const saveUser = await userData.save()
 
     res.status(201).json({
         data : saveUser,
@@ -46,7 +47,7 @@ async function userSignUpcontroller(req, res,){
     })
 
   }catch(err){
-    console.log("err",)
+    console.log("err",)                      //-------important---------//
     res.json({
         message : err.message || err,
         error : true,
