@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
 import { setUserdetails } from '../store/userSlice';
+import ROLE from '../common/role';
 
 
 const Header = () => {
@@ -15,7 +16,7 @@ const Header = () => {
   const dispatch = useDispatch()
 
   const [menuDisplay,setMenuDisplay] = useState(false)
-  console.log("user header" ,user)
+
 
   const handleLogout = async() => {
     const fetchData = await fetch(SummaryApi.logout.url,{
@@ -53,7 +54,9 @@ const Header = () => {
             
 
             <div className='flex items-center  gap-7 '>
+                
                 <div className='reletive group flex justify-center'>
+                    
                 <div className=' text-4xl cursor-pointer'onClick={()=>setMenuDisplay(preve =>!preve)}>
                     {
                         
@@ -69,7 +72,12 @@ const Header = () => {
                         menuDisplay && (
                         <div className='absolute bg-white bottom-0 top-11 h-fit p-2 text-lg shadow-lg rounded-md '>
                         <nav>
-                            <Link to={"admin-panel"}className=''>Admin panel</Link>
+                            {
+                                user?.role === ROLE.ADMIN && (
+                                    <Link to={"admin-panel"}className=''>Admin panel</Link>
+                                )
+                            }
+                            
                         </nav>
                     </div>
                     

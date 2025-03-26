@@ -52,7 +52,8 @@ const Signup = () => {
                 //return
             }
             else{
-                console.log("Passwords do not match")
+                toast.error('Passwords do not match')       //--------fixed error--------///
+                
             }
             // call your API here with the data
             
