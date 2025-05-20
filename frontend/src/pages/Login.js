@@ -83,7 +83,7 @@ const Login = () => {
                             className='w-full h-full outline-none bg-transparent' required />
                     </div>   
                 </div>
-                <button className='bg-red-600 text-white m-2 px-6 py-2 rounded-2xl hover:scale-105 hover:bg-red-700 transition-all mx-auto block mt-4'>Login</button>
+                <button className='bg-red-600 text-white m-2 px-44 py-2 rounded-2xl hover:scale-105 hover:bg-red-700 transition-all mx-auto block mt-10'>Login</button>
                 
             </form>
             <p className='my-4 text-center'>Don't have account ? <Link to={"/sign-up"} className=' text-red-600 hover:text-red-700 hover:underline' >Sign Up</Link> </p>

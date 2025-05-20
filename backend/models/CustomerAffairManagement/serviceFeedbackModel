@@ -1,0 +1,29 @@
+// serviceFeedbackModel.js
+const mongoose = require('mongoose');
+
+const serviceFeedbackSchema = new mongoose.Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    rating: {
+      type: Number,
+      min: 0,
+      max: 5,
+    },
+    message: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+
+const serviceFeedbackModel = mongoose.model('ServiceFeedback', serviceFeedbackSchema);
+
+module.exports = serviceFeedbackModel;

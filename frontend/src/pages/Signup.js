@@ -92,16 +92,22 @@ const Signup = () => {
                 </div>
 
                 <div>
-                    <label>Password</label>
-                    <div className='bg-slate-200 p-2 m-2 rounded-md'>
-                        <input type='password' 
-                            placeholder='Enter password'
-                            name='password'
-                            value={data.password}  
-                            onChange={handleOnChange}   
-                            className='w-full h-full outline-none bg-transparent' required />
-                    </div>   
-                </div>
+    <label>Password</label>
+    <div className='bg-slate-200 p-2 m-2 rounded-md'>
+        <input
+            type='password'
+            placeholder='Enter password'
+            name='password'
+            value={data.password}
+            onChange={handleOnChange}
+            className='w-full h-full outline-none bg-transparent'
+            required
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+            title="Password must be at least 6 characters long and include at least one uppercase letter, one lowercase letter, and one number."
+        />
+    </div>
+</div>
+
 
                 <div>
                     <label>Confirm Password</label>
